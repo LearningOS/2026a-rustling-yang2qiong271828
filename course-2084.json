@@ -2,7 +2,7 @@
   "schema": 1,
   "courseId": 2084,
   "repository": "LearningOS/2026a-rustling-yang2qiong271828",
-  "commit": "524e829e3fb96ed1327501d98faee2542fcfd802",
+  "commit": "aa9803786a50606ad146ab9c90d97267f77532b3",
   "score": 99,
   "totalScore": 110,
   "exercises": [
@@ -778,9 +778,9 @@
     }
   ],
   "student": "yang2qiong271828",
-  "runId": "37605962206",
+  "runId": "37606928101",
   "runAttempt": "1",
   "upload": {
-    "status": "accepted"
+    "status": "pending"
   }
 }
