@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -69,14 +69,56 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self  
+    where
+        T: Ord,
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+		let mut result = LinkedList::new();
+        let mut a = list_a.start;
+        let mut b = list_b.start;
+
+        while a.is_some() && b.is_some() {
+            let a_ptr = a.unwrap();
+            let b_ptr = b.unwrap();
+            let take_a = unsafe { (*a_ptr.as_ptr()).val <= (*b_ptr.as_ptr()).val };
+
+            let chosen = if take_a {
+                a = unsafe { (*a_ptr.as_ptr()).next };
+                a_ptr
+            } else {
+                b = unsafe { (*b_ptr.as_ptr()).next };
+                b_ptr
+            };
+            unsafe { (*chosen.as_ptr()).next = None };
+
+            if let Some(end_ptr) = result.end {
+                unsafe { (*end_ptr.as_ptr()).next = Some(chosen) };
+            } else {
+                result.start = Some(chosen);
+            }
+            result.end = Some(chosen);
+            result.length += 1;
         }
+
+        // At most one of a / b is still Some here.
+        if let Some(rest_ptr) = if a.is_some() { a } else { b } {
+            if let Some(end_ptr) = result.end {
+                unsafe { (*end_ptr.as_ptr()).next = Some(rest_ptr) };
+            } else {
+                result.start = Some(rest_ptr);
+            }
+            let mut tail = rest_ptr;
+            loop {
+                result.length += 1;
+                match unsafe { (*tail.as_ptr()).next } {
+                    Some(n) => tail = n,
+                    None => break,
+                }
+            }
+            result.end = Some(tail);
+        }
+
+        result
 	}
 }
 
